@@ -1,17 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 import Book from './Book'
 
 class Search extends React.Component {
+  static propTypes = {
+    onUpdateBook: PropTypes.func
+  }
+
   state = {
-    books: []
+    books: [],
+    query: ''
+  }
+
+  componentDidMount() {
+    const input = document.getElementById('txtSearch')
+    if (input) input.focus()
   }
 
   onChange(query) {
+    this.setState({ query })
     if (query) {
       BooksAPI.search(query).then((books) => {
-        this.setState({ books })
+        const data = books instanceof Array ? books : []
+        if (this.state.query === query) this.setState({ books: data })
       })
     } else {
       this.setState({ books: [] })
@@ -27,6 +40,7 @@ class Search extends React.Component {
           </Link>
           <div className="search-books-input-wrapper">
             <input
+              id="txtSearch"
               type="text"
               onChange={(e) => this.onChange(e.target.value)}
               placeholder="Search by title or author"
@@ -36,8 +50,8 @@ class Search extends React.Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {this.state.books.map((book) => (
-              <li key={book.title}>
-                <Book book={book} />
+              <li key={book.id}>
+                <Book book={book} onUpdateBook={this.props.onUpdateBook} />
               </li>
             ))}
           </ol>

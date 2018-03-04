@@ -20,6 +20,13 @@ class BooksApp extends React.Component {
     return this.state.books.filter((book) => book.shelf === shelf)
   }
 
+  updateBookShelf(book, shelf) {
+    BooksAPI.update(book, shelf).then(() => {
+      book.shelf = shelf
+      this.setState(() => {})
+    })
+  }
+
   render() {
     return (
       <div className="app">
@@ -36,9 +43,18 @@ class BooksApp extends React.Component {
                   <BookShelf
                     title="Currently Reading"
                     books={this.booksOnTheShelf('currentlyReading')}
+                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
                   />
-                  <BookShelf title="Want to Read" books={this.booksOnTheShelf('wantToRead')} />
-                  <BookShelf title="Read" books={this.booksOnTheShelf('read')} />
+                  <BookShelf
+                    title="Want to Read"
+                    books={this.booksOnTheShelf('wantToRead')}
+                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
+                  />
+                  <BookShelf
+                    title="Read"
+                    books={this.booksOnTheShelf('read')}
+                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
+                  />
                 </div>
               </div>
               <div className="open-search">
@@ -48,7 +64,12 @@ class BooksApp extends React.Component {
           )}
         />
 
-        <Route path="/search" render={() => <Search />} />
+        <Route
+          path="/search"
+          render={() => (
+            <Search onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)} />
+          )}
+        />
       </div>
     )
   }
