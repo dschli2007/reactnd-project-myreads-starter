@@ -6,7 +6,8 @@ import Book from './Book'
 
 class Search extends React.Component {
   static propTypes = {
-    onUpdateBook: PropTypes.func
+    onUpdateBook: PropTypes.func,
+    onGetCurrentShelf: PropTypes.func
   }
 
   state = {
@@ -21,9 +22,13 @@ class Search extends React.Component {
 
   onChange(query) {
     this.setState({ query })
+    const getCurrentShelf = this.props.onGetCurrentShelf
     if (query) {
       BooksAPI.search(query).then((books) => {
-        const data = books instanceof Array ? books : []
+        const data = (books instanceof Array ? books : []).map((book) => {
+          book.shelf = getCurrentShelf(book)
+          return book
+        })
         if (this.state.query === query) this.setState({ books: data })
       })
     } else {

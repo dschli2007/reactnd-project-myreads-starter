@@ -4,6 +4,11 @@ import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
 
 class Book extends Component {
+  constructor(props) {
+    super(props)
+    this.shelf = props.book.shelf ? props.book.shelf : 'none'
+  }
+
   static propTypes = {
     book: PropTypes.object.isRequired,
     onUpdateBook: PropTypes.func.isRequired,
@@ -31,8 +36,9 @@ class Book extends Component {
             />
             <div className="book-shelf-changer">
               <select
-                value={book.shelf ? book.shelf : 'none'}
+                value={this.shelf}
                 onChange={(e) => {
+                  this.shelf = e.target.value
                   if (this.props.canBlock) this.setState({ blocking: true })
                   this.props.onUpdateBook(book, e.target.value)
                 }}>

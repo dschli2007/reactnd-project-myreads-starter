@@ -30,6 +30,11 @@ class BooksApp extends React.Component {
     })
   }
 
+  getBookCurrentShelf(book) {
+    const myBook = this.state.books.find((item) => item.id === book.id)
+    return myBook && myBook.shelf ? myBook.shelf : 'none'
+  }
+
   render() {
     const shelves = [
       { id: 'currentlyReading', title: 'Currently Reading' },
@@ -68,7 +73,10 @@ class BooksApp extends React.Component {
         <Route
           path="/search"
           render={() => (
-            <Search onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)} />
+            <Search
+              onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
+              onGetCurrentShelf={(book) => this.getBookCurrentShelf(book)}
+            />
           )}
         />
       </div>
