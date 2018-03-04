@@ -10,14 +10,10 @@ class BooksApp extends React.Component {
     books: []
   }
 
-  getAllBooks() {
+  componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
-  }
-
-  componentDidMount() {
-    this.getAllBooks()
   }
 
   booksOnTheShelf(shelf) {
@@ -25,9 +21,13 @@ class BooksApp extends React.Component {
   }
 
   updateBookShelf(book, shelf) {
-    BooksAPI.update(book, shelf).then(() => {
-      this.getAllBooks()
-    })
+    BooksAPI.update(book, shelf)
+
+    book.shelf = shelf
+    const books = this.state.books
+    if (!books.find((b) => b.id === book.id)) books.push(book)
+
+    this.setState({ books })
   }
 
   getBookCurrentShelf(book) {
