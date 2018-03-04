@@ -15,6 +15,7 @@ class BooksApp extends React.Component {
       this.setState({ books })
     })
   }
+
   componentDidMount() {
     this.getAllBooks()
   }
@@ -30,6 +31,11 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    const shelves = [
+      { id: 'currentlyReading', title: 'Currently Reading' },
+      { id: 'wantToRead', title: 'Want to Read' },
+      { id: 'read', title: 'Read' }
+    ]
     return (
       <div className="app">
         <Route
@@ -42,21 +48,14 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <BookShelf
-                    title="Currently Reading"
-                    books={this.booksOnTheShelf('currentlyReading')}
-                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
-                  />
-                  <BookShelf
-                    title="Want to Read"
-                    books={this.booksOnTheShelf('wantToRead')}
-                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
-                  />
-                  <BookShelf
-                    title="Read"
-                    books={this.booksOnTheShelf('read')}
-                    onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
-                  />
+                  {shelves.map((shelf) => (
+                    <BookShelf
+                      key={shelf.id}
+                      title={shelf.title}
+                      books={this.booksOnTheShelf(shelf.id)}
+                      onUpdateBook={(book, shelf) => this.updateBookShelf(book, shelf)}
+                    />
+                  ))}
                 </div>
               </div>
               <div className="open-search">

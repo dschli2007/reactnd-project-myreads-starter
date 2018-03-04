@@ -51,7 +51,7 @@ class Search extends React.Component {
           <ol className="books-grid">
             {this.state.books.map((book) => (
               <li key={book.id}>
-                <Book book={book} onUpdateBook={this.props.onUpdateBook} />
+                <Book book={book} onUpdateBook={this.props.onUpdateBook} canBlock={false} />
               </li>
             ))}
           </ol>
