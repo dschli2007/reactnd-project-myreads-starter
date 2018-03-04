@@ -10,10 +10,13 @@ class BooksApp extends React.Component {
     books: []
   }
 
-  componentDidMount() {
+  getAllBooks() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
+  }
+  componentDidMount() {
+    this.getAllBooks()
   }
 
   booksOnTheShelf(shelf) {
@@ -22,8 +25,7 @@ class BooksApp extends React.Component {
 
   updateBookShelf(book, shelf) {
     BooksAPI.update(book, shelf).then(() => {
-      book.shelf = shelf
-      this.setState(() => {})
+      this.getAllBooks()
     })
   }
 
