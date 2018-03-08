@@ -20,12 +20,15 @@ class BooksApp extends React.Component {
     return this.state.books.filter((book) => book.shelf === shelf)
   }
 
-  updateBookShelf(book, shelf) {
-    BooksAPI.update(book, shelf)
+  updateBookShelf(bookFromSearch, shelf) {
+    BooksAPI.update(bookFromSearch, shelf)
 
-    book.shelf = shelf
+    bookFromSearch.shelf = shelf
+    // update existing book or add to my books
     const books = this.state.books
-    if (!books.find((b) => b.id === book.id)) books.push(book)
+    const myBook = books.find((b) => b.id === bookFromSearch.id)
+    if (myBook) myBook.shelf = shelf
+    else books.push(bookFromSearch)
 
     this.setState({ books })
   }
